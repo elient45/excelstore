@@ -34,16 +34,19 @@
     .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .7rem;border-radius:999px;background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.35);color:#ccfbf1;font-weight:700;font-size:.85rem}
     .section{padding:80px 0}
     .card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+
+    /* ===== HEADER ===== */
     header.nav{position:sticky;top:0;background:rgba(6,9,16,.65);backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--line);z-index:50}
-    header .inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    header .inner{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
     .brand{display:flex;align-items:center;gap:.6rem;font-weight:900}
     .logo{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--emerald),var(--teal))}
-    nav.links{display:flex;gap:1rem}
-    nav.links a{padding:.55rem .9rem;border-radius:999px;border:1px solid var(--line)}
+    nav.links{display:flex;gap:8px;align-items:center}
+    nav.links a{padding:.55rem .9rem;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+    .menu-btn{display:none; background:none; border:1px solid var(--line); color:var(--ink); border-radius:10px; padding:.5rem .7rem; font-weight:800}
 
     /* HERO */
     .hero{padding:96px 0 40px;position:relative;overflow:hidden}
-    .hero h1{font-size:clamp(2rem,6vw,3.8rem);line-height:1.05;margin:.6rem auto;max-width:20ch;text-align:center}
+    .hero h1{font-size:clamp(1.9rem,6vw,3.4rem);line-height:1.06;margin:.6rem auto;max-width:22ch;text-align:center}
     .grad-text{background:linear-gradient(90deg,var(--emerald),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
     .sub{color:var(--muted);max-width:68ch;margin:0 auto}
     .ctas{margin-top:18px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
@@ -74,19 +77,17 @@
     }
     .videowrap:hover{ transform:translateY(-4px); box-shadow:0 18px 40px rgba(0,0,0,.38); }
     .videowrap video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:#000; }
-
-    /* Calque play : ne bloque pas les clics sur la vidéo */
     .play{ position:absolute; inset:0; display:grid; place-items:center; pointer-events:none; }
     .playbtn{
       pointer-events:auto;
-      width:96px; height:96px; border-radius:999px; border:0; cursor:pointer;
+      width:84px; height:84px; border-radius:999px; border:0; cursor:pointer;
       background:radial-gradient(circle at 30% 30%, #fff, #e6f3f9 45%, #bfe6df 60%);
       box-shadow:0 10px 30px rgba(0,0,0,.35), 0 0 0 12px rgba(45,212,191,.18);
       display:grid; place-items:center; animation:pulsePlay 1.8s ease-in-out infinite;
     }
     .playbtn svg{ transform:translateX(1px); }
     .note{
-      position:absolute; left:12px; bottom:12px; font-size:.9rem; color:#ccfbf1;
+      position:absolute; left:12px; bottom:12px; font-size:.88rem; color:#ccfbf1;
       background:rgba(45,212,191,.14); border:1px solid rgba(45,212,191,.35);
       padding:.35rem .6rem; border-radius:999px; font-weight:700; backdrop-filter: blur(4px);
       pointer-events:none;
@@ -110,22 +111,28 @@
     .duo .stack{position:relative}
     .duo .stack img:first-child{margin-bottom:-10%;z-index:2;position:relative}
     .pricing{background:#060a14;text-align:center}
-    .display-huge{font-size:clamp(3rem,9vw,6rem);line-height:.95}
+    .display-huge{font-size:clamp(2.6rem,9vw,5.6rem);line-height:.95}
     .price{display:inline-flex;align-items:baseline;gap:.5rem}
     .price .big{border-bottom:5px solid var(--line);padding:0 .25rem;border-radius:6px}
     .numbers{position:relative}
     .numbers .kpis{display:grid;grid-template-columns:1fr;gap:26px}
-    .numbers .kpis h2{font-size:clamp(2.4rem,6vw,4.6rem);margin:0}
+    .numbers .kpis h2{font-size:clamp(2.2rem,6vw,4.2rem);margin:0}
     .bg-cover{background-size:cover;background-position:center}
     .stars{display:flex;gap:3px;color:#facc15}
 
     /* ====== AVIS — Carrousel défilant infini ====== */
     .hooks-row{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:10px 0 16px;}
     .hook-chip{display:inline-flex; align-items:center; gap:.4rem; padding:.4rem .7rem; border-radius:999px; background:rgba(45,212,191,.12); border:1px solid rgba(45,212,191,.35); color:#ccfbf1; font-weight:700; font-size:.85rem;}
-    .testi-wrap{position:relative; overflow:hidden;
-      mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);}
-    .testi-track{display:flex; align-items:stretch; gap:18px; width:max-content; animation:scrollX 28s linear infinite;}
+    .testi-wrap{
+      position:relative; overflow:hidden;
+      mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
+    }
+    .testi-track{
+      display:flex; align-items:stretch; gap:18px; width:max-content;
+      animation:scrollX 28s linear infinite;
+      will-change: transform;
+    }
     .testi-track:hover{ animation-play-state: paused; }
     @keyframes scrollX{ 0%{ transform: translateX(0)} 100%{ transform: translateX(-50%)} }
     .tcard{min-width:320px; max-width:360px; background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02)); border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow); padding:18px}
@@ -138,21 +145,45 @@
 
     /* ====== Timer styles ====== */
     .timer-card{margin:24px auto 0; max-width:560px; text-align:center; padding:22px}
-    .time{font-size:clamp(1.8rem,6vw,3rem); font-weight:900; letter-spacing:1px}
+    .time{font-size:clamp(1.6rem,6vw,2.8rem); font-weight:900; letter-spacing:1px}
     .label{color:var(--muted); margin-top:6px}
 
-    /* Responsive */
-    @media (max-width: 1080px){
-      .collage .row{grid-template-columns:1fr 1fr;grid-auto-rows:auto}
-      .duo{grid-template-columns:1fr}
-      .cards-grid{grid-template-columns:1fr}
-      .tcard{min-width:280px}
-    }
+    /* ====== MOBILE (<= 980px) ====== */
     @media (max-width: 980px){
+      .container{width:94vw}
+      .section{padding:64px 0}
       .grid-2{grid-template-columns:1fr}
       .grid-3{grid-template-columns:1fr}
-      .links{display:none}
-      .hero{padding-top:72px}
+      .hero{padding-top:84px}
+      nav.links{display:none; position:absolute; left:0; right:0; top:56px; background:rgba(6,9,16,.95); padding:10px; border-bottom:1px solid var(--line)}
+      nav.links.open{display:flex; overflow-x:auto; -webkit-overflow-scrolling:touch; gap:10px}
+      .menu-btn{display:inline-flex}
+      .collage .row{grid-template-columns:1fr;gap:12px}
+      .cards-grid{grid-template-columns:1fr}
+      .duo{grid-template-columns:1fr}
+      .duo .stack img:first-child{margin-bottom:-6%}
+      .tcard{min-width:260px}
+      .testi-track{animation-duration: 26s}
+    }
+
+    /* ====== SMALL MOBILE (<= 600px) ====== */
+    @media (max-width: 600px){
+      .section{padding:52px 0}
+      .hero h1{font-size:clamp(1.6rem,8vw,2.2rem);max-width:24ch}
+      .badge{font-size:.8rem}
+      .btn{padding:.85rem 1rem}
+      .playbtn{width:72px;height:72px}
+      .note{font-size:.8rem}
+      .tcard{min-width:230px}
+      .testi-track{gap:14px; animation-duration:24s}
+    }
+
+    /* Accessibility / motion */
+    @media (prefers-reduced-motion: reduce){
+      .testi-track{animation: none}
+      .leakbar::after{animation: none}
+      .drip{animation: none}
+      .playbtn{animation: none}
     }
   </style>
 </head>
@@ -160,12 +191,16 @@
   <header class="nav">
     <div class="container inner">
       <div class="brand"><div class="logo"></div><span>Budget planner excel</span></div>
-      <nav class="links" aria-label="Navigation principale">
+
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mainLinks">Menu</button>
+
+      <nav class="links" id="mainLinks" aria-label="Navigation principale">
         <a href="#probleme">Pourquoi ce fichier ?</a>
         <a href="#methode">Voir la démo</a>
         <a href="#collage">Aperçu</a>
         <a href="#acheter">Le prix</a>
       </nav>
+
       <a class="btn" href="#acheter">Nous contacter</a>
     </div>
   </header>
@@ -189,7 +224,7 @@
   <!-- PROBLÉMATIQUE -->
   <section id="probleme" class="section">
     <div class="container center" data-aos="fade-up">
-      <h2 class="grad-text" style="font-size:clamp(1.6rem,3.6vw,2.6rem)">Ce qui t’empêche aujourd’hui</h2>
+      <h2 class="grad-text" style="font-size:clamp(1.4rem,3.6vw,2.4rem)">Ce qui t’empêche aujourd’hui</h2>
       <div class="card tile" style="margin-top:16px">
         <ul style="margin:0;padding:18px 22px 6px 22px;line-height:1.7;text-align:left">
           <li>Fin de mois imprévisible, <b>peur du découvert</b>.</li>
@@ -201,33 +236,31 @@
     </div>
   </section>
 
-  <!-- MÉTHODE (UN SEUL GRAND PLACEHOLDER VIDÉO - FICHIER) -->
+  <!-- MÉTHODE (VIDÉO) -->
   <section id="methode" class="section">
     <div class="container center">
-      <h2 class="grad-text" style="font-size:clamp(1.6rem,3.6vw,2.6rem)" data-aos="fade-up">
+      <h2 class="grad-text" style="font-size:clamp(1.4rem,3.6vw,2.4rem)" data-aos="fade-up">
         Comment l’utiliser ? Je ne suis pas pro Excel !
       </h2>
       <p class="sub" style="margin-top:6px" data-aos="fade-up" data-aos-delay="80">
-        3 étapes en pratique, en moins de 2 minutes.
-        LA VIDEO EST COUPER??(<a href="imgs/1006.mp4" download="video_demo.mp4">CLICK MOI</a>)
+        3 étapes en pratique, en moins de 2 minutes. LA VIDÉO EST COUPÉE ? (<a href="imgs/1006.mp4" download="video_demo.mp4">Clique ici</a>)
       </p>
 
       <div class="card" style="padding:14px; margin-top:24px" data-aos="zoom-in-up">
         <div class="videowrap" id="demoWrap">
-          <!-- Contrôles visibles dès le départ -->
           <video id="demoVideo" controls preload="metadata" playsinline poster="imgs/video-poster.jpg">
             <source src="imgs/1006.mp4" type="video/mp4">
             Ton navigateur ne supporte pas la vidéo HTML5.
           </video>
           <div class="play" id="playOverlay">
             <button type="button" class="playbtn" id="playBtn" aria-label="Lire la petite démo">
-              <svg width="38" height="38" viewBox="0 0 24 24" fill="#0b1020" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7L8 5z"/></svg>
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="#0b1020" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7L8 5z"/></svg>
             </button>
           </div>
           <span class="note">Petite démo</span>
         </div>
       </div>
-      <p class="sub" style="margin-top:10px">Utilise les contrôles pour mettre en pause ⏸️, avancer ⏭️ ou passer en plein écran ⛶.  TU NE VOIS PAS BIEN ??(<a href="imgs/1006.mp4" download="video_demo.mp4">CLICK MOI</a>)</p>
+      <p class="sub" style="margin-top:10px">Utilise les contrôles pour pause ⏸️, avancer ⏭️ ou plein écran ⛶. Tu ne vois pas bien ? (<a href="imgs/1006.mp4" download="video_demo.mp4">Télécharger</a>)</p>
     </div>
   </section>
 
@@ -371,7 +404,7 @@
   <!-- AVIS — Carrousel horizontal (8 avis) -->
   <section class="section">
     <div class="container center" data-aos="fade-up">
-      <h2 class="grad-text" style="font-size:clamp(1.6rem,3.6vw,2.6rem)">Ils ont repris le contrôle</h2>
+      <h2 class="grad-text" style="font-size:clamp(1.4rem,3.6vw,2.4rem)">Ils ont repris le contrôle</h2>
 
       <!-- Hooks percutants -->
       <div class="hooks-row">
@@ -381,7 +414,7 @@
         <span class="hook-chip">« 10 minutes/jour max »</span>
       </div>
 
-      <!-- Carrousel infini -->
+      <!-- Carrousel infini + swipe -->
       <div class="testi-wrap" aria-label="Avis clients défilants">
         <div class="testi-track" id="testiTrack">
           <!-- 8 cartes (seront dupliquées via JS pour boucle lisse) -->
@@ -396,7 +429,7 @@
         </div>
       </div>
 
-      <p class="sub" style="margin-top:14px">Survole pour mettre en pause. Les avis défilent en continu.</p>
+      <p class="sub" style="margin-top:14px">Glisse horizontalement pour parcourir. Survole (desktop) pour mettre en pause.</p>
     </div>
   </section>
 
@@ -407,9 +440,25 @@
   <!-- AOS (JS) -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-  <!-- Compteur 18h + JS divers -->
+  <!-- JS -->
   <script>
-    // ===== Compteur 18 heures persisté localStorage =====
+    // ===== Menu mobile =====
+    (function(){
+      const btn = document.getElementById('menuBtn');
+      const links = document.getElementById('mainLinks');
+      if(!btn || !links) return;
+      btn.addEventListener('click', ()=>{
+        const isOpen = links.classList.toggle('open');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        document.documentElement.style.overflow = isOpen ? 'hidden' : '';
+      });
+      // Ferme le menu au clic sur un lien
+      links.querySelectorAll('a').forEach(a => a.addEventListener('click', ()=>{
+        links.classList.remove('open'); btn.setAttribute('aria-expanded','false'); document.documentElement.style.overflow='';
+      }));
+    })();
+
+    // ===== Compteur 18 heures =====
     (function(){
       const H18_MS = 18 * 60 * 60 * 1000;
       const STORAGE_KEY = 'minuteur18h_end_ts';
@@ -495,40 +544,40 @@
       });
     }, {passive:true});
 
-    // ===== Lecture vidéo — plein contrôle utilisateur =====
+    // ===== Lecture vidéo (contrôles natifs + overlay play) =====
     (function(){
       const video = document.getElementById('demoVideo');
       const playBtn = document.getElementById('playBtn');
       const overlay = document.getElementById('playOverlay');
       if (!video) return;
 
-      // Lancer via bouton flottant (sinon l’utilisateur utilise les contrôles natifs)
       if (playBtn){
         playBtn.addEventListener('click', (e)=>{
           e.stopPropagation();
           video.play().catch(()=>{});
         });
       }
-
-      // Cacher l’overlay dès que la vidéo joue
-      video.addEventListener('play', ()=>{
-        if (overlay) overlay.style.display = 'none';
-      });
-
-      // Si la vidéo se termine, on remet l’overlay (pour inviter à relire)
-      video.addEventListener('ended', ()=>{
-        if (overlay){
-          overlay.style.display = '';
-        }
-      });
+      video.addEventListener('play', ()=>{ if (overlay) overlay.style.display = 'none'; });
+      video.addEventListener('ended', ()=>{ if (overlay) overlay.style.display = ''; });
     })();
 
-    // ===== Carrousel AVIS (duplication pour boucle lisse) =====
+    // ===== Carrousel AVIS : duplication pour boucle lisse + swipe =====
     (function(){
       const track = document.getElementById('testiTrack');
       if(!track) return;
       const clone = track.cloneNode(true);
       Array.from(clone.children).forEach(node => track.appendChild(node.cloneNode(true)));
+
+      // Swipe / drag (mobile & desktop)
+      let isDown=false, startX=0, scrollX=0;
+      const wrap = track.parentElement;
+      wrap.style.overflowX='auto';
+      wrap.style.scrollBehavior='smooth';
+      wrap.style.webkitOverflowScrolling='touch';
+      wrap.addEventListener('pointerdown', e=>{ isDown=true; startX=e.clientX; scrollX=wrap.scrollLeft; wrap.setPointerCapture(e.pointerId); track.style.animationPlayState='paused'; });
+      wrap.addEventListener('pointermove', e=>{ if(!isDown) return; const dx=e.clientX-startX; wrap.scrollLeft = scrollX - dx; });
+      wrap.addEventListener('pointerup', e=>{ isDown=false; track.style.animationPlayState='running'; });
+      wrap.addEventListener('pointercancel', e=>{ isDown=false; track.style.animationPlayState='running'; });
     })();
 
     // ===== Année footer =====
