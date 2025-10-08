@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BudgetZen Excel — Prends le contrôle en 10 min/semaine</title>
+  <meta name="description" content="Fichier Excel avec mode enveloppes, alertes et graphiques automatiques. Stoppe les fuites et gagne en clarté financière en 10 minutes/semaine. Garantie 14 jours."/>
+
+  <!-- Police -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- AOS (animations au scroll) -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+
+  <!-- Animate.css (effets rejouables: pulse, etc.) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <style>
+    :root{
+      --bg:#0b1020; --ink:#e6f3f9; --muted:#9fb0c4; --line:rgba(255,255,255,.10);
+      --emerald:#34d399; --teal:#2dd4bf; --pink:#fb7185; --violet:#a78bfa; --amber:#fbbf24;
+      --radius:22px; --shadow:0 14px 40px rgba(0,0,0,.45);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:radial-gradient(1200px 600px at 50% -10%,rgba(45,212,191,.18),transparent),var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,Segoe UI,Roboto,Arial}
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%;height:auto}
+    .container{width:min(1120px,92vw);margin:0 auto}
+    .center{max-width:820px;margin:0 auto;text-align:center}
+    .btn{display:inline-flex;align-items:center;gap:.6rem;padding:1rem 1.25rem;border-radius:999px;background:linear-gradient(120deg,var(--emerald),var(--teal));color:#022c22;font-weight:900;box-shadow:var(--shadow)}
+    .btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}
+    .badge{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .7rem;border-radius:999px;background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.35);color:#ccfbf1;font-weight:700;font-size:.85rem}
+    .section{padding:80px 0}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    header.nav{position:sticky;top:0;background:rgba(6,9,16,.65);backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--line);z-index:50}
+    header .inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:.6rem;font-weight:900}
+    .logo{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--emerald),var(--teal))}
+    nav.links{display:flex;gap:1rem}
+    nav.links a{padding:.55rem .9rem;border-radius:999px;border:1px solid var(--line)}
+
+    /* HERO */
+    .hero{padding:96px 0 40px;position:relative;overflow:hidden}
+    .hero h1{font-size:clamp(2rem,6vw,3.8rem);line-height:1.05;margin:.6rem auto;max-width:20ch;text-align:center}
+    .grad-text{background:linear-gradient(90deg,var(--emerald),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .sub{color:var(--muted);max-width:68ch;margin:0 auto}
+    .ctas{margin-top:18px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+    /* Hook visuel (barre + gouttes) */
+    .hook-visual{position:relative;width:min(980px,92vw);margin:26px auto 0}
+    .leakbar{height:14px;border-radius:999px;background:linear-gradient(90deg,var(--pink),var(--amber),var(--emerald));overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line)}
+    .leakbar::after{content:"";position:absolute;left:-40%;top:0;bottom:0;width:40%;background:linear-gradient(90deg,rgba(255,255,255,.25),rgba(255,255,255,0));filter:blur(2px);animation:shine 3.5s linear infinite}
+    .drip{position:absolute;left:10%;top:22px;width:10px;height:16px;background:linear-gradient(var(--pink),transparent);border-radius:8px;animation:drip 2.6s ease-in-out infinite}
+    .drip.d2{left:45%;animation-delay:.8s}.drip.d3{left:78%;animation-delay:1.4s}
+    @keyframes shine{to{transform:translateX(250%);} }
+    @keyframes drip{0%{opacity:.0;transform:translateY(0)}20%{opacity:1}70%{transform:translateY(26px)}100%{opacity:0;transform:translateY(42px)}}
+
+    /* Helpers */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:center}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .tile{padding:20px;transition:transform .25s ease, box-shadow .25s ease}
+    .tile:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,.38)}
+    .chip{display:inline-flex;padding:.35rem .6rem;border-radius:999px;background:#0b2330;border:1px solid var(--line);font-size:.8rem}
+
+    /* ====== MÉTHODE — Bloc vidéo unique ====== */
+    .videowrap{
+      position:relative; display:block; width:100%; aspect-ratio:16/9;
+      border-radius:22px; overflow:hidden; border:1px solid var(--line);
+      background:radial-gradient(1000px 400px at 50% -10%, rgba(45,212,191,.18), transparent),
+                 linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow:var(--shadow); transition:transform .25s ease, box-shadow .25s ease;
+    }
+    .videowrap:hover{ transform:translateY(-4px); box-shadow:0 18px 40px rgba(0,0,0,.38); }
+    .videowrap video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:#000; }
+
+    /* Calque play : ne bloque pas les clics sur la vidéo */
+    .play{ position:absolute; inset:0; display:grid; place-items:center; pointer-events:none; }
+    .playbtn{
+      pointer-events:auto;
+      width:96px; height:96px; border-radius:999px; border:0; cursor:pointer;
+      background:radial-gradient(circle at 30% 30%, #fff, #e6f3f9 45%, #bfe6df 60%);
+      box-shadow:0 10px 30px rgba(0,0,0,.35), 0 0 0 12px rgba(45,212,191,.18);
+      display:grid; place-items:center; animation:pulsePlay 1.8s ease-in-out infinite;
+    }
+    .playbtn svg{ transform:translateX(1px); }
+    .note{
+      position:absolute; left:12px; bottom:12px; font-size:.9rem; color:#ccfbf1;
+      background:rgba(45,212,191,.14); border:1px solid rgba(45,212,191,.35);
+      padding:.35rem .6rem; border-radius:999px; font-weight:700; backdrop-filter: blur(4px);
+      pointer-events:none;
+    }
+    @keyframes pulsePlay{ 0%,100%{ transform:scale(1); box-shadow:0 10px 30px rgba(0,0,0,.35), 0 0 0 12px rgba(45,212,191,.18) } 50%{ transform:scale(1.08); box-shadow:0 16px 42px rgba(0,0,0,.45), 0 0 0 18px rgba(45,212,191,.10) } }
+
+    /* ====== SECTIONS inspirées du modèle (le reste) ====== */
+    .collage{position:relative;background:transparent}
+    .collage .row{display:grid;grid-template-columns:1.6fr .9fr .9fr;gap:18px;align-items:center}
+    .rounded-5{border-radius:22px}
+    .shadow{box-shadow:var(--shadow)}
+    .img-tilt{transform:translateY(0);transition:transform .35s ease}
+    .img-tilt:hover{transform:translateY(-6px)}
+    .split{background:#0a0f1e}
+    .border-secondary{border-color:var(--line)}
+    .link-fancy{position:relative}
+    .link-fancy::after{content:"";position:absolute;left:0;bottom:-2px;width:100%;height:1px;background:linear-gradient(90deg,var(--emerald),var(--teal));opacity:.6}
+    .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+    .no-bottom-radius{border-bottom-left-radius:0;border-bottom-right-radius:0}
+    .duo{display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:center}
+    .duo .stack{position:relative}
+    .duo .stack img:first-child{margin-bottom:-10%;z-index:2;position:relative}
+    .pricing{background:#060a14;text-align:center}
+    .display-huge{font-size:clamp(3rem,9vw,6rem);line-height:.95}
+    .price{display:inline-flex;align-items:baseline;gap:.5rem}
+    .price .big{border-bottom:5px solid var(--line);padding:0 .25rem;border-radius:6px}
+    .numbers{position:relative}
+    .numbers .kpis{display:grid;grid-template-columns:1fr;gap:26px}
+    .numbers .kpis h2{font-size:clamp(2.4rem,6vw,4.6rem);margin:0}
+    .bg-cover{background-size:cover;background-position:center}
+    .stars{display:flex;gap:3px;color:#facc15}
+
+    /* ====== AVIS — Carrousel défilant infini ====== */
+    .hooks-row{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:10px 0 16px;}
+    .hook-chip{display:inline-flex; align-items:center; gap:.4rem; padding:.4rem .7rem; border-radius:999px; background:rgba(45,212,191,.12); border:1px solid rgba(45,212,191,.35); color:#ccfbf1; font-weight:700; font-size:.85rem;}
+    .testi-wrap{position:relative; overflow:hidden;
+      mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);}
+    .testi-track{display:flex; align-items:stretch; gap:18px; width:max-content; animation:scrollX 28s linear infinite;}
+    .testi-track:hover{ animation-play-state: paused; }
+    @keyframes scrollX{ 0%{ transform: translateX(0)} 100%{ transform: translateX(-50%)} }
+    .tcard{min-width:320px; max-width:360px; background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02)); border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow); padding:18px}
+    .tmeta{ display:flex; align-items:center; gap:12px; margin-top:12px; }
+    .avatar{ width:40px;height:40px;border-radius:50%; background:linear-gradient(135deg,var(--emerald),var(--teal)); display:inline-block; }
+    .tname{ font-weight:800; }
+    .trole{ color:var(--muted); font-size:.9rem; }
+    .tquote{ margin:10px 0 0; color:var(--ink); }
+    .tstars{ color:#facc15; letter-spacing:2px; font-size:1rem }
+
+    /* ====== Timer styles ====== */
+    .timer-card{margin:24px auto 0; max-width:560px; text-align:center; padding:22px}
+    .time{font-size:clamp(1.8rem,6vw,3rem); font-weight:900; letter-spacing:1px}
+    .label{color:var(--muted); margin-top:6px}
+
+    /* Responsive */
+    @media (max-width: 1080px){
+      .collage .row{grid-template-columns:1fr 1fr;grid-auto-rows:auto}
+      .duo{grid-template-columns:1fr}
+      .cards-grid{grid-template-columns:1fr}
+      .tcard{min-width:280px}
+    }
+    @media (max-width: 980px){
+      .grid-2{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:1fr}
+      .links{display:none}
+      .hero{padding-top:72px}
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="container inner">
+      <div class="brand"><div class="logo"></div><span>Budget planner excel</span></div>
+      <nav class="links" aria-label="Navigation principale">
+        <a href="#probleme">Pourquoi ce fichier ?</a>
+        <a href="#methode">Voir la démo</a>
+        <a href="#collage">Aperçu</a>
+        <a href="#acheter">Le prix</a>
+      </nav>
+      <a class="btn" href="#acheter">Nous contacter</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero center" data-aos="fade-up">
+    <span class="badge">+500 utilisateurs</span>
+    <h1>Fin de mois à 0&nbsp;$ ? Stop. <span class="grad-text">Passe à +100&nbsp;$/mois</span>.<br>Reprends le contrôle en <span class="grad-text">10 minutes/jour</span>.</h1>
+    <p class="sub">Fichier Excel (mode enveloppes, alertes de dépassement, épargnes, graphiques automatiques). Conçu pour particuliers, couples et indépendants.</p>
+    <div class="ctas">
+      <a class="btn" href="#acheter">Je passe à l'action</a>
+      <a class="btn secondary" href="#methode">Voir la démo</a>
+    </div>
+    <div class="hook-visual" data-aos="zoom-in" data-aos-delay="150">
+      <div class="leakbar"></div>
+      <div class="drip"></div><div class="drip d2"></div><div class="drip d3"></div>
+      <p class="sub" style="margin-top:10px">Sans système, l'argent <b>fuit</b> en silence. Avec Budget Planner, chaque dépense a une place et un plafond.</p>
+    </div>
+  </section>
+
+  <!-- PROBLÉMATIQUE -->
+  <section id="probleme" class="section">
+    <div class="container center" data-aos="fade-up">
+      <h2 class="grad-text" style="font-size:clamp(1.6rem,3.6vw,2.6rem)">Ce qui t’empêche aujourd’hui</h2>
+      <div class="card tile" style="margin-top:16px">
+        <ul style="margin:0;padding:18px 22px 6px 22px;line-height:1.7;text-align:left">
+          <li>Fin de mois imprévisible, <b>peur du découvert</b>.</li>
+          <li>Petites dépenses qui s’accumulent, <b>zéro vision globale</b>.</li>
+          <li>Budget en couple = <b>tensions et non-dits</b>.</li>
+        </ul>
+      </div>
+      <p class="sub" style="margin-top:12px">Ce n’est pas une question de volonté. C’est une question de <b>système</b> — simple, visible, répétable.</p>
+    </div>
+  </section>
+
+  <!-- MÉTHODE (UN SEUL GRAND PLACEHOLDER VIDÉO - FICHIER) -->
+  <section id="methode" class="section">
+    <div class="container center">
+      <h2 class="grad-text" style="font-size:clamp(1.6rem,3.6vw,2.6rem)" data-aos="fade-up">
+        Comment l’utiliser ? Je ne suis pas pro Excel !
+      </h2>
+      <p class="sub" style="margin-top:6px" data-aos="fade-up" data-aos-delay="80">
+        3 étapes en pratique, en moins de 2 minutes.
+        LA VIDEO EST COUPER??(<a href="imgs/1006.mp4" download="video_demo.mp4">CLICK MOI</a>)
+      </p>
+
+      <div class="card" style="padding:14px; margin-top:24px" data-aos="zoom-in-up">
+        <div class="videowrap" id="demoWrap">
+          <!-- Contrôles visibles dès le départ -->
+          <video id="demoVideo" controls preload="metadata" playsinline poster="imgs/video-poster.jpg">
+            <source src="imgs/1006.mp4" type="video/mp4">
+            Ton navigateur ne supporte pas la vidéo HTML5.
+          </video>
+          <div class="play" id="playOverlay">
+            <button type="button" class="playbtn" id="playBtn" aria-label="Lire la petite démo">
+              <svg width="38" height="38" viewBox="0 0 24 24" fill="#0b1020" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7L8 5z"/></svg>
+            </button>
+          </div>
+          <span class="note">Petite démo</span>
+        </div>
+      </div>
+      <p class="sub" style="margin-top:10px">Utilise les contrôles pour mettre en pause ⏸️, avancer ⏭️ ou passer en plein écran ⛶.  TU NE VOIS PAS BIEN ??(<a href="imgs/1006.mp4" download="video_demo.mp4">CLICK MOI</a>)</p>
+    </div>
+  </section>
+
+  <!-- COLLAGE 3 IMAGES -->
+  <section id="collage" class="section collage">
+    <div class="container">
+      <div class="row">
+        <div data-aos="fade-up" data-aos-delay="0">
+          <img class="rounded-5 shadow img-tilt animate__animated" src="imgs/nom produit.png" alt="Nom du produit">
+        </div>
+        <div data-aos="fade-up" data-aos-delay="120">
+          <img class="rounded-5 shadow img-tilt animate__animated" src="imgs/ce qui inclus.png" alt="Ce qui est inclus">
+        </div>
+        <div data-aos="fade-up" data-aos-delay="240">
+          <img class="rounded-5 shadow img-tilt animate__animated" src="imgs/repartition famiale.png" alt="Répartition familiale">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION SPLIT (texte long + sous-blocs) -->
+  <section class="section split">
+    <div class="container">
+      <div class="grid-2" style="align-items:start">
+        <div data-aos="fade-right">
+          <span class="badge">Ce que tu obtiens</span>
+          <h2 class="grad-text" style="margin-top:10px">Clarté, contrôle, sérénité.</h2>
+          <p class="sub">Budget Planner te montre <b>où va l’argent</b>, te prévient quand tu dépasses un plafond, et garde ton couple <b>du même côté</b> grâce à la version Google Sheets.</p>
+        </div>
+        <div data-aos="fade-left">
+          <h3>Design & méthode</h3>
+          <p class="sub">Pensé pour une prise en main en 30 min. Enveloppes, objectifs, suivi visuel.</p>
+          <a href="#methode" class="link-fancy">Voir la démo</a>
+          <h3 style="margin-top:26px" class="border-secondary">Automations & alertes</h3>
+          <p class="sub">Graphiques automatiques, récap mensuel/annuel, export PDF.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CARTES IMAGE + TEXTE (2x2) -->
+  <section class="section">
+    <div class="container">
+      <div class="cards-grid">
+        <div class="card" data-aos="zoom-in-up">
+          <img src="imgs/image generale.png" alt="Vue générale" class="rounded-5 no-bottom-radius">
+          <div style="padding:22px">
+            <h3 class="grad-text">Vue générale</h3>
+            <p class="sub">Tableau d’ensemble, catégories, flux et solde.</p>
+            <p class="sub">Comprend des catégories de la vie courante, avec <b>dépenses prévues</b> vs <b>dépenses réelles</b>.</p>
+          </div>
+        </div>
+        <div class="card" data-aos="zoom-in-up" data-aos-delay="120">
+          <img src="imgs/graphique.png" alt="Graphiques" class="rounded-5 no-bottom-radius">
+          <div style="padding:22px">
+            <h3 class="grad-text">Graphiques clairs</h3>
+            <p class="sub">Suivi mensuel/annuel pour repérer les postes “qui mangent”.</p>
+            <p class="sub">Les graphiques s’adaptent automatiquement, sans intervention.</p>
+          </div>
+        </div>
+        <div class="card" data-aos="zoom-in-up" data-aos-delay="240">
+          <img src="imgs/categoris loisirs.png" alt="Catégories" class="rounded-5 no-bottom-radius">
+          <div style="padding:22px">
+            <h3 class="grad-text">Catégories flex</h3>
+            <p class="sub">Personnalise tes enveloppes (loisirs, transport, food…).</p>
+            <p class="sub">Un tableau dédié aux dépenses quotidiennes (courses, resto, carburant, etc.) calcule tout pour toi.</p>
+          </div>
+        </div>
+        <div class="card" data-aos="zoom-in-up" data-aos-delay="360">
+          <img src="imgs/recap.png" alt="Récap" class="rounded-5 no-bottom-radius">
+          <div style="padding:22px">
+            <h3 class="grad-text">Récap qui motive</h3>
+            <p class="sub">Récap annuel + suggestions : repère les mois et catégories qui te “mangent” le plus pour réajuster.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DUO IMAGES CHEVAUCHÉES (+ texte) -->
+  <section class="section" style="background:#0a0f1e">
+    <div class="container duo">
+      <div class="stack">
+        <img class="rounded-5 shadow animate__animated"
+             src="imgs/pret imo.png" alt="Prêt immo"
+             data-aos="zoom-in-right" data-aos-delay="50" data-aos-anchor-placement="top-bottom">
+        <img class="rounded-5 shadow animate__animated"
+             src="imgs/mes depenses.png" alt="Mes dépenses"
+             data-aos="zoom-in-up" data-aos-delay="200" data-aos-anchor-placement="top-bottom">
+      </div>
+      <div class="card" style="padding:28px" data-aos="fade-left" data-aos-delay="250">
+        <span class="badge">Sans friction</span>
+        <h3 class="grad-text" style="margin-top:10px">Tout tenir en 10 minutes/jour</h3>
+        <p class="sub">Tu complètes, tu ajustes, tu avances. Le fichier fait le reste.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING XXL -->
+  <section id="acheter" class="section pricing">
+    <div class="container center" data-aos="fade-up">
+      <h2 class="grad-text">Un prix simple, un impact durable</h2>
+      <div class="display-huge" style="margin:10px 0 16px">
+        <span class="price"><span class="fs-4" style="opacity:.8"></span> -45% sur le prix <span class="big"></span><span class="fs-6" style="opacity:.8"></span></span>
+      </div>
+      <p class="sub">Excel + Quick Start PDF + 1 vidéo + mises à jour 12 mois.</p>
+      <div style="margin-top:16px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap">
+        <a class="btn" href="https://excelstore.store/excelshop">Acheter maintenant — 13 USD ou 7 500 CFA</a>
+        <a class="btn secondary" href="https://chat.whatsapp.com/D1Fx23RXmFTL3ZNeiEHLle?mode=ems_copy_t">Discuter sur WhatsApp</a>
+      </div>
+
+      <!-- Timer -->
+      <div class="card timer-card" aria-live="polite">
+        <div class="time" id="display">--:--:--</div>
+        <div class="label">Temps restant</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUMBERS / KPIs -->
+  <section class="section numbers">
+    <div class="container">
+      <div class="kpis">
+        <div data-aos="fade-up">
+          <span class="badge">La preuve par les chiffres</span>
+          <h2 class="grad-text">+280</h2>
+          <p class="sub">Budgets remis sur rails.</p>
+        </div>
+        <div style="border-top:1px solid var(--line);padding-top:22px" data-aos="fade-up" data-aos-delay="120">
+          <h2 class="grad-text">12 680</h2>
+          <p class="sub">Lignes de dépenses catégorisées.</p>
+        </div>
+        <div style="border-top:1px solid var(--line);padding-top:22px" data-aos="fade-up" data-aos-delay="240">
+          <h2 class="grad-text">98%</h2>
+          <p class="sub">Disent “plus serein qu’avant”.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AVIS — Carrousel horizontal (8 avis) -->
+  <section class="section">
+    <div class="container center" data-aos="fade-up">
+      <h2 class="grad-text" style="font-size:clamp(1.6rem,3.6vw,2.6rem)">Ils ont repris le contrôle</h2>
+
+      <!-- Hooks percutants -->
+      <div class="hooks-row">
+        <span class="hook-chip">« +22% d’épargne en 30 jours »</span>
+        <span class="hook-chip">« Adieu découvert »</span>
+        <span class="hook-chip">« Zéro dispute budget »</span>
+        <span class="hook-chip">« 10 minutes/jour max »</span>
+      </div>
+
+      <!-- Carrousel infini -->
+      <div class="testi-wrap" aria-label="Avis clients défilants">
+        <div class="testi-track" id="testiTrack">
+          <!-- 8 cartes (seront dupliquées via JS pour boucle lisse) -->
+          <article class="tcard"><div class="tstars">★★★★★</div><p class="tquote">« J’ai réduit mes dépenses variables de 22% en 30 jours. Le stress est tombé. »</p><div class="tmeta"><span class="avatar" aria-hidden="true"></span><div><div class="tname">Sarah M.</div><div class="trole">Étudiante</div></div></div></article>
+          <article class="tcard"><div class="tstars">★★★★★</div><p class="tquote">« Enveloppes + alertes = fini les dépassements. Simple et redoutable. »</p><div class="tmeta"><span class="avatar" aria-hidden="true"></span><div><div class="tname">Jonas K.</div><div class="trole">Employé</div></div></div></article>
+          <article class="tcard"><div class="tstars">★★★★★</div><p class="tquote">« En couple, on voit tout. On parle chiffres sans se disputer. »</p><div class="tmeta"><span class="avatar" aria-hidden="true"></span><div><div class="tname">Grace L.</div><div class="trole">Indépendante</div></div></div></article>
+          <article class="tcard"><div class="tstars">★★★★★</div><p class="tquote">« J’ai arrêté de “deviner”. Les plafonds me guident au quotidien. »</p><div class="tmeta"><span class="avatar" aria-hidden="true"></span><div><div class="tname">Kevin T.</div><div class="trole">Junior Dev</div></div></div></article>
+          <article class="tcard"><div class="tstars">★★★★★</div><p class="tquote">« Premier mois sans découvert depuis un an. Ça change la vie. »</p><div class="tmeta"><span class="avatar" aria-hidden="true"></span><div><div class="tname">Aïcha D.</div><div class="trole">Commerciale</div></div></div></article>
+          <article class="tcard"><div class="tstars">★★★★★</div><p class="tquote">« On a financé nos billets d’avion sans toucher au loyer. »</p><div class="tmeta"><span class="avatar" aria-hidden="true"></span><div><div class="tname">Patrick & Zoé</div><div class="trole">Couple</div></div></div></article>
+          <article class="tcard"><div class="tstars">★★★★★</div><p class="tquote">« J’ai enfin une vision claire. Les catégories font tout le boulot. »</p><div class="tmeta"><span class="avatar" aria-hidden="true"></span><div><div class="tname">Prisca N.</div><div class="trole">Freelance</div></div></div></article>
+          <article class="tcard"><div class="tstars">★★★★★</div><p class="tquote">« 10 minutes le dimanche et je sais où va chaque dollar. »</p><div class="tmeta"><span class="avatar" aria-hidden="true"></span><div><div class="tname">Yann R.</div><div class="trole">Data Analyst</div></div></div></article>
+        </div>
+      </div>
+
+      <p class="sub" style="margin-top:14px">Survole pour mettre en pause. Les avis défilent en continu.</p>
+    </div>
+  </section>
+
+  <footer style="padding:36px 0;border-top:1px solid var(--line);color:var(--muted)">
+    <div class="container center">© <span id="year"></span> BudgetZen • <a href="#" style="text-decoration:underline">Mentions légales</a> • <a href="#" style="text-decoration:underline">Politique de confidentialité</a></div>
+  </footer>
+
+  <!-- AOS (JS) -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <!-- Compteur 18h + JS divers -->
+  <script>
+    // ===== Compteur 18 heures persisté localStorage =====
+    (function(){
+      const H18_MS = 18 * 60 * 60 * 1000;
+      const STORAGE_KEY = 'minuteur18h_end_ts';
+      const display = document.getElementById('display');
+      if (!display) return;
+
+      function getOrCreateEndTs(){
+        const saved = localStorage.getItem(STORAGE_KEY);
+        const now = Date.now();
+        if (saved){
+          const ts = Number(saved);
+          if (!Number.isFinite(ts) || ts <= now){
+            const newTs = now + H18_MS;
+            localStorage.setItem(STORAGE_KEY, String(newTs));
+            return newTs;
+          }
+          return ts;
+        } else {
+          const newTs = now + H18_MS;
+          localStorage.setItem(STORAGE_KEY, String(newTs));
+          return newTs;
+        }
+      }
+      function forceReset(){
+        const newTs = Date.now() + H18_MS;
+        localStorage.setItem(STORAGE_KEY, String(newTs));
+        return newTs;
+      }
+      let endTs = getOrCreateEndTs();
+      function formatMs(ms){
+        const totalSec = Math.max(0, Math.floor(ms/1000));
+        const s = totalSec % 60;
+        const m = Math.floor(totalSec/60) % 60;
+        const h = Math.floor(totalSec/3600);
+        return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+      }
+      function tick(){
+        const now = Date.now();
+        let remaining = endTs - now;
+        if (remaining <= 0){
+          endTs = forceReset();
+          remaining = endTs - now;
+        }
+        display.textContent = formatMs(remaining);
+      }
+      function startInterval(){
+        tick();
+        const delay = 1000 - (Date.now() % 1000);
+        setTimeout(function(){ tick(); setInterval(tick, 1000); }, delay);
+      }
+      window.addEventListener('storage', (e)=>{
+        if (e.key === STORAGE_KEY){
+          const val = Number(e.newValue);
+          if (Number.isFinite(val) && val > Date.now()) endTs = val;
+        }
+      });
+      startInterval();
+    })();
+
+    // ===== AOS =====
+    if (window.AOS) {
+      AOS.init({ duration: 900, once: false, mirror: true, offset: 120, easing: 'ease-out-cubic' });
+    }
+
+    // ===== Re-animate (Animate.css) =====
+    const reanimate = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
+    const ioAnim = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        const el = entry.target;
+        if(entry.isIntersecting){ reanimate(el, 'animate__pulse'); }
+        else { el.classList.remove('animate__pulse'); }
+      });
+    }, {threshold: 0.35});
+    document.querySelectorAll('.stack img, .collage img').forEach(img=>ioAnim.observe(img));
+
+    // ===== Micro-parallaxe section duo =====
+    const stackImgs = document.querySelectorAll('.stack img');
+    window.addEventListener('scroll', ()=>{
+      const y = window.scrollY || 0;
+      stackImgs.forEach((img, i)=>{
+        const amt = (i===0 ? 1.2 : -0.8);
+        img.style.transform = `translateY(${(y*0.02)*amt}px)`;
+      });
+    }, {passive:true});
+
+    // ===== Lecture vidéo — plein contrôle utilisateur =====
+    (function(){
+      const video = document.getElementById('demoVideo');
+      const playBtn = document.getElementById('playBtn');
+      const overlay = document.getElementById('playOverlay');
+      if (!video) return;
+
+      // Lancer via bouton flottant (sinon l’utilisateur utilise les contrôles natifs)
+      if (playBtn){
+        playBtn.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          video.play().catch(()=>{});
+        });
+      }
+
+      // Cacher l’overlay dès que la vidéo joue
+      video.addEventListener('play', ()=>{
+        if (overlay) overlay.style.display = 'none';
+      });
+
+      // Si la vidéo se termine, on remet l’overlay (pour inviter à relire)
+      video.addEventListener('ended', ()=>{
+        if (overlay){
+          overlay.style.display = '';
+        }
+      });
+    })();
+
+    // ===== Carrousel AVIS (duplication pour boucle lisse) =====
+    (function(){
+      const track = document.getElementById('testiTrack');
+      if(!track) return;
+      const clone = track.cloneNode(true);
+      Array.from(clone.children).forEach(node => track.appendChild(node.cloneNode(true)));
+    })();
+
+    // ===== Année footer =====
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
